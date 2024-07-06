@@ -32,12 +32,6 @@ class Ikko extends Controller
 		return [];
 	}
 
-	public function onMenuChangedAction(): HttpResponse
-	{
-		$this->updateStatus();
-		return new AjaxJson();
-	}
-
 	public function onItemsOrderedAction(): HttpResponse
 	{
 		$orders = $this->getOrders();
@@ -58,7 +52,7 @@ class Ikko extends Controller
 
 		$menu = Menu::createFromArray($this->getMenu());
 		$this->updateStatus($menu);
-		//send
+		//Chat::get()->sendItemAppeared($item);
 
 		return new AjaxJson();
 	}
@@ -69,7 +63,7 @@ class Ikko extends Controller
 
 		$menu = Menu::createFromArray($this->getMenu());
 		$this->updateStatus($menu);
-		// send message
+		//Chat::get()->sendItemExpired($item);
 
 		return new AjaxJson();
 	}
@@ -78,7 +72,7 @@ class Ikko extends Controller
 	{
 		$this->shift->pause();
 		$this->updateStatus();
-		// send message
+		Chat::get()->sendShiftPaused();
 
 		return new AjaxJson();
 	}
@@ -87,7 +81,7 @@ class Ikko extends Controller
 	{
 		$this->shift->resume();
 		$this->updateStatus();
-		//send message
+		Chat::get()->sendShiftResumed();
 
 		return new AjaxJson();
 	}
@@ -97,7 +91,7 @@ class Ikko extends Controller
 		$this->shift->start();
 		$menu = Menu::createFromArray($this->getMenu());
 		$this->updateStatus($menu);
-		//send message
+		Chat::get()->sendShiftStarted();
 
 		return new AjaxJson();
 	}
@@ -106,7 +100,7 @@ class Ikko extends Controller
 	{
 		$this->shift->finish();
 		$this->updateStatus();
-		//send message
+		Chat::get()->sendShiftEnded();
 		//send stat
 
 		return new AjaxJson();

@@ -3,6 +3,7 @@
 namespace Bitrix\Ikkomodule;
 
 use Bitrix\Ikkomodule\Bot\Barista;
+use Bitrix\Ikkomodule\Model\MenuItem;
 use Bitrix\Ikkomodule\Model\Modifier;
 use Bitrix\Ikkomodule\Model\Status;
 use Bitrix\Im\V2\Chat\ChatFactory;
@@ -34,6 +35,36 @@ class Chat
 		}
 
 		return self::$instance;
+	}
+
+	public function sendItemAppeared(MenuItem $item): void
+	{
+		$this->sendSimple("Появился {$item->title} :)");
+	}
+
+	public function sendItemExpired(MenuItem $item): void
+	{
+		$this->sendSimple("Закончился {$item->title} :(");
+	}
+
+	public function sendShiftPaused(): void
+	{
+		$this->sendSimple("Бариста отошел и скоро вернется");
+	}
+
+	public function sendShiftResumed(): void
+	{
+		$this->sendSimple("Бариста вернулся и готов принимать заказы");
+	}
+
+	public function sendShiftStarted(): void
+	{
+		$this->sendSimple("Кофейня открылась!");
+	}
+
+	public function sendShiftEnded(): void
+	{
+		$this->sendSimple("Кофейна на сегодня закончила свою работу. До завтра!");
 	}
 
 	public function sendSimple(string $message): void
