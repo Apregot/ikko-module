@@ -11,9 +11,9 @@ class Modifier
 		$id = (int)($data['id'] ?? 0);
 		$title = (string)($data['title'] ?? '');
 		$type = (string)($data['type'] ?? '');
-		$isAvailable = (string)($data['available'] ?? false);
+		$isAvailable = (bool)($data['available'] ?? false);
 
-		return new static($id, $title, $categoryId, $isAvailable);
+		return new static($id, $title, $type, $isAvailable);
 	}
 
 	public function __construct(

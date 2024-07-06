@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Bitrix\Ikko\Configuration;
+namespace Bitrix\Ikkomodule\Configuration;
 
 class Config
 {
 	public static function getIkkoUrl(): string
 	{
-		return '';
+		return 'http://localhost:3000';
 	}
 }
