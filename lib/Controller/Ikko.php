@@ -22,13 +22,11 @@ class Ikko extends Controller
 
 	public function onMenuChangedAction(array $menu = []): HttpResponse
 	{
-		$response = $this->httpClient->post(Config::getIkkoUrl());
-		$data = Json::decode($response);
-		if ($data['status'] === 'success')
-		{
-			$menu = $data['menu'];
-		}
+		return new AjaxJson();
+	}
 
+	public function onItemsOrderedAction(array $orderedItems = []): HttpResponse
+	{
 		return new AjaxJson();
 	}
 
