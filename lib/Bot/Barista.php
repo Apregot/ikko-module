@@ -12,6 +12,16 @@ class Barista extends Base
 	public const BOT_CODE = 'barista';
 	public const MODULE_ID = 'ikkomodule';
 
+	public static function getOrCreateId(): int
+	{
+		if (!self::getBotId())
+		{
+			self::register();
+		}
+
+		return self::getBotId();
+	}
+
 	public static function register(array $params = [])
 	{
 		$birthday = new \Bitrix\Main\Type\DateTime('2024-10-01 19:45:00', 'Y-m-d H:i:s');
