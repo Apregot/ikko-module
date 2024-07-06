@@ -5,7 +5,9 @@ namespace Bitrix\Ikkomodule;
 use Bitrix\Ikkomodule\Bot\Barista;
 use Bitrix\Ikkomodule\Model\MenuItem;
 use Bitrix\Ikkomodule\Model\Modifier;
+use Bitrix\Ikkomodule\Model\Statistic;
 use Bitrix\Ikkomodule\Model\Status;
+use Bitrix\Ikkomodule\Service\OrderService;
 use Bitrix\Im\V2\Chat\ChatFactory;
 use Bitrix\Im\V2\Chat\OpenChannelChat;
 use Bitrix\Im\V2\Link\Pin\PinService;
@@ -64,7 +66,33 @@ class Chat
 
 	public function sendShiftEnded(): void
 	{
-		$this->sendSimple("Кофейна на сегодня закончила свою работу. До завтра!");
+		$statistic = $this->getStatisticText();
+		$this->sendSimple("Кофейна на сегодня закончила свою работу.\n{$statistic}\nДо завтра!");
+	}
+
+	private function getStatisticText(): string
+	{
+		$statistic = (new OrderService())->getStatistic();
+		$text = "Статистика за день:\n";
+		$text .= "Самые популярные напитки:\n";
+		$text .= $this->getMostPopularText($statistic) . "\n";
+		$text .= "Всего заказов: {$statistic->totalCount}! Вы вообще работаете?\n";
+		$text .= "Усталость баристы: {$statistic->baristaFatigue}%";
+
+		return $text;
+	}
+
+	private function getMostPopularText(Statistic $statistic): string
+	{
+		$text = '';
+		$index = 1;
+
+		foreach ($statistic->mostPopular as $name => $count)
+		{
+			$text .= "{$index}. {$name} ({$count})";
+		}
+
+		return $text;
 	}
 
 	public function sendSimple(string $message): void

@@ -3,6 +3,7 @@
 namespace Bitrix\Ikkomodule\Service;
 
 use Bitrix\Ikkomodule\Model\Order;
+use Bitrix\Ikkomodule\Model\Statistic;
 use Bitrix\IkkoModule\Table\OrderTable;
 use Bitrix\Main\Entity\ExpressionField;
 use Bitrix\Main\ORM\Query\Query;
@@ -60,6 +61,14 @@ class OrderService
 		return (int)($total * 1.16);
 	}
 
+	public function getStatistic(): Statistic
+	{
+		return new Statistic(
+			$this->getMostPopular(),
+			$this->getTotalCount(),
+			$this->getBaristaFatigue(),
+		);
+	}
 
 	public function save(Order $order): void
 	{
