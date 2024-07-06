@@ -1,5 +1,5 @@
 <?php
-namespace Bitrix\IkkoModule\Table;
+namespace Bitrix\Ikkomodule\Table;
 
 use Bitrix\Main\ORM\Data\DataManager;
 use Bitrix\Main\ORM\Fields\DatetimeField;
