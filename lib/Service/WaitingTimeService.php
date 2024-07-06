@@ -18,7 +18,7 @@ class WaitingTimeService
 
 	public function calculateWaitingTime(): int
 	{
-		$date = (new DateTime())->add('-1000 minutes');
+		$date = (new DateTime())->add('-15 minutes');
 		$orders = $this->orderService->getItemsFromTo($date);
 		$complexities  = $this->productComplexityService->getAll();
 
