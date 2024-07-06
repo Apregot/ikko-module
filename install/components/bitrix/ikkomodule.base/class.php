@@ -6,6 +6,8 @@ class IkkoModuleBaseComponent extends CBitrixComponent
 	{
 		\Bitrix\Main\Loader::includeModule('ikkomodule');
 
+		$a = (new \Bitrix\Ikkomodule\Service\WaitingTimeService())->calculateWaitingTime();
+
 		$this->includeComponentTemplate();
 	}
 }

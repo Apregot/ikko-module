@@ -12,6 +12,14 @@ if ($updater->CanUpdateDatabase())
 			DATE datetime NOT NULL,
 		);
 	');
+
+	$updater->Query('
+		CREATE TABLE IF NOT EXISTS b_ikkomodule_product_complexity (
+			ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+			NAME varchar(255) NOT NULL,
+			SECONDS_TO_MAKE INT NOT NULL
+		);
+	');
 }
 
 if ($updater->CanUpdateDatabase())

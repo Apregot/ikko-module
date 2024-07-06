@@ -49,6 +49,7 @@ class OrderService
 		return (int)$result['ORDER_COUNT'];
 	}
 
+	/** @return  array<Order> */
 	public function getItemsFromTo(DateTime $from, DateTime $to = new DateTime()): array
 	{
 		$items = OrderTable::query()
