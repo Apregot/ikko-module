@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Bitrix\Ikkomodule\Controller;
 
 use Bitrix\Ikko\Configuration\Config;
+use Bitrix\Ikkomodule\Bot\Barista;
 use Bitrix\Ikkomodule\Model\Menu;
 use Bitrix\IkkoModule\Service\OrderService;
 use Bitrix\Ikkomodule\Service\Shift;
@@ -70,6 +71,11 @@ class Ikko extends Controller
 	{
 		$this->shift->finish();
 		return new AjaxJson();
+	}
+
+	public function onDetailInfoClickAction(string $product): int
+	{
+		return Barista::getBotId();
 	}
 
 	protected function getOrders(): array
