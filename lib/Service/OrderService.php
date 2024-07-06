@@ -53,6 +53,17 @@ class OrderService
 		return $res;
 	}
 
+	public function getBaristaFatigue(): int
+	{
+		$total = $this->getTotalCount();
+		if ($total > 100)
+		{
+			return 100;
+		}
+
+		return $total;
+	}
+
 
 	public function save(Order $order): void
 	{
