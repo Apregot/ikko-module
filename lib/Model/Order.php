@@ -1,6 +1,6 @@
 <?php
 
-namespace Bitrix\Ikkomodule\Service;
+namespace Bitrix\Ikkomodule\Model;
 
 use Bitrix\Main\Type\DateTime;
 
