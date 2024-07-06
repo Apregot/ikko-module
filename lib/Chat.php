@@ -96,7 +96,7 @@ class Chat
 	private function getAttachByStatus(Status $status): \CIMMessageParamAttach
 	{
 		$attach = new \CIMMessageParamAttach();
-		$aboutLink = Application::getDocumentRoot() . '/ikkomodule/about?id=';
+		$aboutLink = Application::getDocumentRoot() . '/ikko/product-info/';
 		foreach ($status->menu->categories as $category)
 		{
 			$attach->AddMessage($category->title);
@@ -106,7 +106,7 @@ class Chat
 			{
 				$grid[] = [
 					'VALUE' => "{$index}. {$item->title}",
-					'LINK' => $aboutLink . $item->title,
+					'LINK' => $aboutLink . $item->id,
 					'DISPLAY' => 'LINE',
 				];
 				$index++;

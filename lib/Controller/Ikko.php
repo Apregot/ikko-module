@@ -73,7 +73,7 @@ class Ikko extends Controller
 		return new AjaxJson();
 	}
 
-	public function onDetailInfoClickAction(string $product): int
+	public function onDetailInfoClickAction(int $productId): int
 	{
 		return Barista::getBotId();
 	}
