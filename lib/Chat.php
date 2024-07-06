@@ -192,8 +192,9 @@ class Chat
 			$index = 1;
 			foreach ($category->items as $item)
 			{
+				$name = $item->isAvailable ? $item->title : '[s]' . $item->title . '[/s]';
 				$grid[] = [
-					'VALUE' => "{$index}. {$item->title}",
+					'VALUE' => "{$index}. {$name}",
 					'LINK' => $aboutLink . $item->id,
 					'DISPLAY' => 'LINE',
 					'WIDTH' => 200,
@@ -225,6 +226,7 @@ class Chat
 				continue;
 			}
 
+			$name = $modifier->isAvailable ? $modifier->title : '[s]' . $modifier->title . '[/s]';
 			$grid[] = [
 				'VALUE' => "{$index}. {$modifier->title}",
 				'DISPLAY' => 'LINE',
