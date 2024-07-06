@@ -108,7 +108,7 @@ class Ikko extends Controller
 
 	public function onDetailInfoClickAction(int $product): int
 	{
-		Chat::get()->sendDetail();
+		Chat::get()->sendDetail($product, (int)$this->getCurrentUser()?->getId());
 
 		return Barista::getOrCreateId();
 	}
