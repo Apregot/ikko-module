@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Bitrix\Ikkomodule\Service;
 
 use Bitrix\Ikkomodule\Configuration\Config;
+use Bitrix\Ikkomodule\Model\DetailItem;
 use Bitrix\Ikkomodule\Model\Menu;
+use Bitrix\Ikkomodule\Model\MenuItem;
 use Bitrix\Main\Web\HttpClient;
 use Bitrix\Main\Web\Json;
 
@@ -18,12 +20,14 @@ class DetailService
 		$this->init();
 	}
 
-	public function fetch(int $id): Menu
+	public function fetch(int $id): DetailItem
 	{
-		$response = $this->httpClient->post(Config::getIkkoUrl() . '/api/menu/list');
+		$r = Json::encode(['id' => $id,]);
+		$response = $this->httpClient->post(Config::getIkkoUrl() . '/api/item/get', $r);
+
 		$data = Json::decode($response);
 
-		return Menu::createFromArray($data);
+		return DetailItem::createFromArray($data);
 	}
 
 	protected function init(): void
