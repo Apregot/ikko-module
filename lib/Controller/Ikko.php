@@ -14,6 +14,12 @@ use Bitrix\Main\Web\Json;
 class Ikko extends Controller
 {
 	protected HttpClient $httpClient;
+
+	public function getDefaultPreFilters()
+	{
+		return [];
+	}
+
 	public function postMenuAction(): HttpResponse
 	{
 		$response = $this->httpClient->post(Config::getIkkoUrl());
