@@ -3,10 +3,12 @@
 namespace Bitrix\Ikkomodule;
 
 use Bitrix\Ikkomodule\Bot\Barista;
+use Bitrix\Ikkomodule\Model\DetailItem;
 use Bitrix\Ikkomodule\Model\MenuItem;
 use Bitrix\Ikkomodule\Model\Modifier;
 use Bitrix\Ikkomodule\Model\Statistic;
 use Bitrix\Ikkomodule\Model\Status;
+use Bitrix\Ikkomodule\Service\DetailService;
 use Bitrix\Ikkomodule\Service\OrderService;
 use Bitrix\Im\V2\Chat\ChatFactory;
 use Bitrix\Im\V2\Chat\OpenChannelChat;
@@ -37,6 +39,21 @@ class Chat
 		}
 
 		return self::$instance;
+	}
+
+	public function sendDetail(int $itemId): void
+	{
+		$detail = (new DetailService())->fetch($itemId);
+		$this->sendSimple($this->getDetailText($detail));
+	}
+
+	private function getDetailText(DetailItem $detailItem): string
+	{
+		$text = "Расскажу подробнее о выбранном продукте :)\n";
+		$text .= $detailItem->description . "\n";
+		$text .= $detailItem->imageUrl;
+
+		return $text;
 	}
 
 	public function sendItemAppeared(MenuItem $item): void

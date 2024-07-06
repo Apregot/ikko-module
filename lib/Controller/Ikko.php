@@ -108,7 +108,9 @@ class Ikko extends Controller
 
 	public function onDetailInfoClickAction(int $productId): int
 	{
-		return Barista::getBotId();
+
+
+		return Barista::getOrCreateId();
 	}
 
 	protected function getOrders(): array
