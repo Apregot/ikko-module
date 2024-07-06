@@ -56,12 +56,8 @@ class OrderService
 	public function getBaristaFatigue(): int
 	{
 		$total = $this->getTotalCount();
-		if ($total > 100)
-		{
-			return 100;
-		}
 
-		return $total;
+		return (int)($total * 1.16);
 	}
 
 
