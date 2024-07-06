@@ -61,7 +61,7 @@ class Chat
 
 	private function getDetailText(DetailItem $detailItem): string
 	{
-		$text = "Расскажу подробнее о выбранном продукте :)\n";
+		$text = "Расскажу подробнее о выбранном продукте\n";
 		$text .= $detailItem->description . "\n";
 		$text .= $detailItem->imageUrl;
 
@@ -96,7 +96,7 @@ class Chat
 	public function sendShiftEnded(): void
 	{
 		$statistic = $this->getStatisticText();
-		$this->sendSimple("Кофейна на сегодня закончила свою работу.\n{$statistic}\nДо завтра!");
+		$this->sendSimple("Кофейня на сегодня закончила свою работу.\n{$statistic}\nДо завтра!");
 	}
 
 	private function getStatisticText(): string
@@ -118,7 +118,8 @@ class Chat
 
 		foreach ($statistic->mostPopular as $name => $count)
 		{
-			$text .= "{$index}. {$name} ({$count})";
+			$text .= "{$index}. {$name} ({$count})\n";
+			$index++;
 		}
 
 		return $text;
