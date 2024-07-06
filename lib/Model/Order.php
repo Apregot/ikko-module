@@ -6,7 +6,7 @@ use Bitrix\Main\Type\DateTime;
 
 class Order
 {
-	private int $id = 0;
+	private int $itemId;
 	private string $name;
 	private DateTime $date;
 
@@ -15,14 +15,14 @@ class Order
 		$this->date = new DateTime();
 	}
 
-	public function getId(): int
+	public function getItemId(): int
 	{
-		return $this->id;
+		return $this->getItemId;
 	}
 
-	public function setId(int $id): self
+	public function setItemId(int $itemId): self
 	{
-		$this->id = $id;
+		$this->itemId = $itemId;
 
 		return $this;
 	}
@@ -32,7 +32,7 @@ class Order
 		return $this->name;
 	}
 
-	public function setName(string $name): self
+	public function setName(string $name): Order
 	{
 		$this->name = $name;
 
@@ -42,12 +42,5 @@ class Order
 	public function getDate(): DateTime
 	{
 		return $this->date;
-	}
-
-	public function setDate(DateTime $date): self
-	{
-		$this->date = $date;
-
-		return $this;
 	}
 }

@@ -10,6 +10,7 @@ use Bitrix\Ikkomodule\Chat;
 use Bitrix\Ikkomodule\Model\Menu;
 use Bitrix\Ikkomodule\Model\Status;
 use Bitrix\Ikkomodule\Service\MenuService;
+use Bitrix\Ikkomodule\Model\Order;
 use Bitrix\IkkoModule\Service\OrderService;
 use Bitrix\Ikkomodule\Service\Shift;
 use Bitrix\Ikkomodule\Service\WaitingTimeService;
@@ -23,6 +24,7 @@ class Ikko extends Controller
 {
 	protected HttpClient $httpClient;
 	protected Shift $shift;
+	protected OrderService $orderService;
 
 	public function getDefaultPreFilters()
 	{
@@ -38,7 +40,14 @@ class Ikko extends Controller
 	public function onItemsOrderedAction(): HttpResponse
 	{
 		$orders = $this->getOrders();
-		// save
+		$ordersDto = [];
+		foreach ($orders as $order)
+		{
+			$ordersDto[] = (new Order())->setItemId($order['itemId'])->setName($order['title']);
+		}
+
+		$this->orderService->saveBatch($ordersDto);
+
 		return new AjaxJson();
 	}
 
@@ -139,5 +148,6 @@ class Ikko extends Controller
 
 		$this->httpClient = new HttpClient();
 		$this->shift = new Shift();
+		$this->orderService = new OrderService();
 	}
 }

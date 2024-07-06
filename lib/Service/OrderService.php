@@ -5,10 +5,55 @@ namespace Bitrix\Ikkomodule\Service;
 use Bitrix\Ikkomodule\Model\Order;
 use Bitrix\IkkoModule\Table\OrderTable;
 use Bitrix\Main\Entity\ExpressionField;
+use Bitrix\Main\ORM\Query\Query;
 use Bitrix\Main\Type\DateTime;
 
 class OrderService
 {
+	public function getTotalCount(): int
+	{
+		$todayA = (new DateTime())->setTime(0, 0, 0);
+		$todayB  =  (new DateTime())->setTime(23, 59, 59);
+
+		$row = OrderTable::query()
+			->setSelect([Query::expr('TOTAL')->count('ID')])
+			->where('DATE', '>=', $todayA)
+			->where('DATE', '<=', $todayB)
+			->exec()
+			->fetch();
+
+		return (int)($row['TOTAL'] ?? 0);
+	}
+
+	public function getMostPopular(): array
+	{
+		$todayA = (new DateTime())->setTime(0, 0, 0);
+		$todayB  =  (new DateTime())->setTime(23, 59, 59);
+
+		$rows = OrderTable::query()
+			->setSelect(['NAME'])
+			->where('DATE', '>=', $todayA)
+			->where('DATE', '<=', $todayB)
+			->exec()
+			->fetchAll();
+
+		$names = array_column($rows, 'NAME');
+		$res = array_fill_keys($names, 0);
+		foreach ($rows as $row)
+		{
+			$res[$row['NAME']]++;
+		}
+
+		$res = array_filter($res);
+		if (count($res) > 3)
+		{
+			$res = array_slice($res, 0, 3);
+		}
+
+		return $res;
+	}
+
+
 	public function save(Order $order): void
 	{
 		OrderTable::add([
@@ -67,7 +112,7 @@ class OrderService
 		{
 			$result[] = (new Order())
 				->setId($item['ID'])
-				->setName($item['NAME'])
+				->setItemId($item['NAME'])
 				->setItemId($item['ITEM_ID'])
 				->setDate($item['DATE'])
 			;
