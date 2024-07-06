@@ -20,6 +20,15 @@ if ($updater->CanUpdateDatabase())
 			SECONDS_TO_MAKE INT NOT NULL
 		);
 	');
+
+	if ($updater->TableExists("b_ikkomodule_order"))
+	{
+		try {
+			$updater->Query('ALTER TABLE b_ikkomodule_order ADD COLUMN ITEM_ID int not null');
+		}
+		catch (Exception $e)
+		{}
+	}
 }
 
 if ($updater->CanUpdateDatabase())

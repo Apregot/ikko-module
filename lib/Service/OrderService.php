@@ -13,6 +13,7 @@ class OrderService
 	{
 		OrderTable::add([
 			'NAME' => $order->getName(),
+			'ITEM_ID' => $order->getItemId(),
 			'DATE' => $order->getDate(),
 		]);
 	}
@@ -26,6 +27,7 @@ class OrderService
 		{
 			$preparedOrders[] = [
 				'NAME' => $order->getName(),
+				'ITEM_ID' => $order->getItemId(),
 				'DATE' => $order->getDate(),
 			];
 		}
@@ -66,6 +68,7 @@ class OrderService
 			$result[] = (new Order())
 				->setId($item['ID'])
 				->setName($item['NAME'])
+				->setItemId($item['ITEM_ID'])
 				->setDate($item['DATE'])
 			;
 		}
