@@ -86,7 +86,7 @@ class Chat
 	private function getMessageByStatus(Status $status): string
 	{
 		$lastDateUpdate = (new DateTime())->toUserTime();
-		$waitingTime = (int)((new WaitingTimeService())->calculateWaitingTime() / 60) . ' мин.';
+		$waitingTime = (int)($status->waitingTime / 60) . ' мин.';
 		$idle = $status->idle ? 'нет' : 'да';
 
 		return "Последнее обновление: {$lastDateUpdate}\nПримерное время ожидания: {$waitingTime}\nНа месте ли бариста: {$idle}";
@@ -108,10 +108,12 @@ class Chat
 					'LINK' => $aboutLink . $item->title,
 					'DISPLAY' => 'LINE',
 				];
+				$index++;
 			}
 			$attach->AddGrid($grid);
 			$attach->AddDelimiter();
 		}
+
 
 		return $attach;
 	}
