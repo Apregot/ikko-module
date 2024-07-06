@@ -20,7 +20,7 @@ class Ikko extends Controller
 		return [];
 	}
 
-	public function postMenuAction(): HttpResponse
+	public function onMenuChangedAction(array $menu = []): HttpResponse
 	{
 		$response = $this->httpClient->post(Config::getIkkoUrl());
 		$data = Json::decode($response);
@@ -32,12 +32,12 @@ class Ikko extends Controller
 		return new AjaxJson();
 	}
 
-	public function onItemAddedAction(array $addedItem = [], array $menu = []): HttpResponse
+	public function onItemAppearedAction(array $addedItem = [], array $menu = []): HttpResponse
 	{
 		return new AjaxJson();
 	}
 
-	public function onItemRemovedAction(array $removedItem = [], array $menu = []): HttpResponse
+	public function onItemExpiredAction(array $removedItem = [], array $menu = []): HttpResponse
 	{
 		return new AjaxJson();
 	}
@@ -47,7 +47,12 @@ class Ikko extends Controller
 		return new AjaxJson();
 	}
 
-	public function onShiftStartedAction(): HttpResponse
+	public function onShiftResumedAction(): HttpResponse
+	{
+		return new AjaxJson();
+	}
+
+	public function onShiftStartedAction(array $menu = []): HttpResponse
 	{
 		return new AjaxJson();
 	}
