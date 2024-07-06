@@ -196,6 +196,7 @@ class Chat
 					'VALUE' => "{$index}. {$item->title}",
 					'LINK' => $aboutLink . $item->id,
 					'DISPLAY' => 'LINE',
+					'WIDTH' => 200,
 				];
 				$index++;
 			}
@@ -227,6 +228,7 @@ class Chat
 			$grid[] = [
 				'VALUE' => "{$index}. {$modifier->title}",
 				'DISPLAY' => 'LINE',
+				'WIDTH' => 200,
 			];
 
 			$index++;
