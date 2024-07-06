@@ -14,6 +14,11 @@ class Category
 		return new static($id, $title);
 	}
 
+	/**
+	 * @param int $id
+	 * @param string $title
+	 * @param MenuItem[] $items
+	 */
 	public function __construct(
 		public readonly int    $id,
 		public readonly string $title,

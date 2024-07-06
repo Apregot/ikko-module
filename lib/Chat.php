@@ -3,10 +3,13 @@
 namespace Bitrix\Ikkomodule;
 
 use Bitrix\Ikkomodule\Bot\Barista;
+use Bitrix\Ikkomodule\Model\Status;
+use Bitrix\Ikkomodule\Service\WaitingTimeService;
 use Bitrix\Im\V2\Chat\ChatFactory;
 use Bitrix\Im\V2\Chat\OpenChannelChat;
 use Bitrix\Im\V2\Link\Pin\PinService;
 use Bitrix\Im\V2\Message;
+use Bitrix\Main\Application;
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Type\DateTime;
@@ -38,9 +41,9 @@ class Chat
 		$this->sendInternal(['MESSAGE' => $message]);
 	}
 
-	public function sendStatus(): int
+	public function sendStatus(Status $status): int
 	{
-		$id = $this->sendInternal(['MESSAGE' => 'menu']);
+		$id = $this->sendInternal($this->getMessageFieldsByStatus($status));
 		$this->setStatusMessageId($id);
 		$message = new Message($id);
 		(new PinService())->setContextUser(Barista::getOrCreateId())->pinMessage($message);
@@ -48,28 +51,69 @@ class Chat
 		return $id;
 	}
 
-	public function updateStatus(): int
+	public function updateStatus(Status $status): int
 	{
 		$messageId = $this->getStatusMessageId();
 
 		if (!$messageId)
 		{
-			return $this->sendStatus();
+			return $this->sendStatus($status);
 		}
 
 		$message = new Message($messageId);
 
 		if ($this->isMessageFromAnotherDay($message))
 		{
-			return $this->sendStatus();
+			return $this->sendStatus($status);
 		}
 
 		(new Message\Update\UpdateService($message))
 			->setContextUser(Barista::getOrCreateId())
-			->update(['MESSAGE' => 'menu1'])
+			->update($this->getMessageFieldsByStatus($status))
 		;
 
 		return $messageId;
+	}
+
+	private function getMessageFieldsByStatus(Status $status): array
+	{
+		$message = $this->getMessageByStatus($status);
+		$attach = $this->getAttachByStatus($status);
+
+		return ['MESSAGE' => $message, 'ATTACH' => $attach];
+	}
+
+	private function getMessageByStatus(Status $status): string
+	{
+		$lastDateUpdate = (new DateTime())->toUserTime();
+		$waitingTime = (int)((new WaitingTimeService())->calculateWaitingTime() / 60) . ' мин.';
+		$idle = $status->idle ? 'нет' : 'да';
+
+		return "Последнее обновление: {$lastDateUpdate}\nПримерное время ожидания: {$waitingTime}\nНа месте ли бариста: {$idle}";
+	}
+
+	private function getAttachByStatus(Status $status): \CIMMessageParamAttach
+	{
+		$attach = new \CIMMessageParamAttach();
+		$aboutLink = Application::getDocumentRoot() . '/ikkomodule/about?id=';
+		foreach ($status->menu->categories as $category)
+		{
+			$attach->AddMessage($category->title);
+			$grid = [];
+			$index = 1;
+			foreach ($category->items as $item)
+			{
+				$grid[] = [
+					'VALUE' => "{$index}. {$item->title}",
+					'LINK' => $aboutLink . $item->title,
+					'DISPLAY' => 'LINE',
+				];
+			}
+			$attach->AddGrid($grid);
+			$attach->AddDelimiter();
+		}
+
+		return $attach;
 	}
 
 	private function isMessageFromAnotherDay(Message $message): bool
