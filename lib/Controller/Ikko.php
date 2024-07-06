@@ -8,6 +8,7 @@ use Bitrix\Ikkomodule\Configuration\Config;
 use Bitrix\Ikkomodule\Bot\Barista;
 use Bitrix\Ikkomodule\Chat;
 use Bitrix\Ikkomodule\Model\Menu;
+use Bitrix\Ikkomodule\Model\MenuItem;
 use Bitrix\Ikkomodule\Model\Status;
 use Bitrix\Ikkomodule\Service\MenuService;
 use Bitrix\Ikkomodule\Model\Order;
@@ -53,6 +54,8 @@ class Ikko extends Controller
 
 	public function onItemAppearedAction(): HttpResponse
 	{
+		$item = MenuItem::createFromArray($this->getMenuItem());
+
 		$menu = Menu::createFromArray($this->getMenu());
 		$this->updateStatus($menu);
 		//send
@@ -62,6 +65,8 @@ class Ikko extends Controller
 
 	public function onItemExpiredAction(): HttpResponse
 	{
+		$item = MenuItem::createFromArray($this->getMenuItem());
+
 		$menu = Menu::createFromArray($this->getMenu());
 		$this->updateStatus($menu);
 		// send message
@@ -120,6 +125,11 @@ class Ikko extends Controller
 	protected function getMenu(): array
 	{
 		return (array)$this->getRequestData('menu');
+	}
+
+	protected function getMenuItem(): array
+	{
+		return (array)$this->getRequestData('item');
 	}
 
 	protected function getRequestData(string $name = ''): mixed
