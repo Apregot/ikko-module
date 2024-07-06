@@ -17,7 +17,14 @@ class Order
 
 	public function getItemId(): int
 	{
-		return $this->getItemId;
+		return $this->itemId;
+	}
+
+	public function setDate(DateTime $date): static
+	{
+		$this->date = $date;
+
+		return $this;
 	}
 
 	public function setItemId(int $itemId): self

@@ -38,7 +38,7 @@ class Ikko extends Controller
 		$ordersDto = [];
 		foreach ($orders as $order)
 		{
-			$ordersDto[] = (new Order())->setItemId($order['itemId'])->setName($order['title']);
+			$ordersDto[] = (new Order())->setItemId($order['id'])->setName($order['title']);
 		}
 
 		$this->orderService->saveBatch($ordersDto);

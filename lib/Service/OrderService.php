@@ -46,8 +46,10 @@ class OrderService
 		}
 
 		$res = array_filter($res);
+		arsort($res);
 		if (count($res) > 3)
 		{
+			$l = count($res);
 			$res = array_slice($res, 0, 3);
 		}
 
@@ -127,8 +129,7 @@ class OrderService
 		foreach ($items as $item)
 		{
 			$result[] = (new Order())
-				->setId($item['ID'])
-				->setItemId($item['NAME'])
+				->setName($item['NAME'])
 				->setItemId($item['ITEM_ID'])
 				->setDate($item['DATE'])
 			;

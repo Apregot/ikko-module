@@ -10,7 +10,7 @@ class Shift
 {
 	public function isOpened(): bool
 	{
-		return Option::get('ikkomodule', 'barista_is_here', 0) === 1;
+		return (int)Option::get('ikkomodule', 'barista_is_here', 0) === 1;
 	}
 
 	public function start(): void

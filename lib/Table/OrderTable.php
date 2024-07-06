@@ -45,6 +45,8 @@ class OrderTable extends DataManager
 				->configureAutocomplete(true)
 				->configureSize(8)
 			,
+			(new IntegerField('ITEM_ID'))
+			,
 			(new StringField('NAME',
 				[
 					'validation' => function()
