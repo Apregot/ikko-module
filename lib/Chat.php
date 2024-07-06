@@ -3,6 +3,7 @@
 namespace Bitrix\Ikkomodule;
 
 use Bitrix\Ikkomodule\Bot\Barista;
+use Bitrix\Ikkomodule\Model\Modifier;
 use Bitrix\Ikkomodule\Model\Status;
 use Bitrix\Ikkomodule\Service\WaitingTimeService;
 use Bitrix\Im\V2\Chat\ChatFactory;
@@ -113,9 +114,37 @@ class Chat
 			$attach->AddGrid($grid);
 			$attach->AddDelimiter();
 		}
-
+		$attach->AddMessage('Молоко');
+		$attach->AddGrid($this->getGridForMilk($status->menu->modifiers));
 
 		return $attach;
+	}
+
+	/**
+	 * @param Modifier[] $modifiers
+	 * @return array
+	 */
+	private function getGridForMilk(array $modifiers): array
+	{
+		$grid = [];
+		$index = 1;
+
+		foreach ($modifiers as $modifier)
+		{
+			if ($modifier->type !== 'milk')
+			{
+				continue;
+			}
+
+			$grid[] = [
+				'VALUE' => "{$index}. {$modifier->title}",
+				'DISPLAY' => 'LINE',
+			];
+
+			$index++;
+		}
+
+		return $grid;
 	}
 
 	private function isMessageFromAnotherDay(Message $message): bool
