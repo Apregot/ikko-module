@@ -5,7 +5,6 @@ namespace Bitrix\Ikkomodule;
 use Bitrix\Ikkomodule\Bot\Barista;
 use Bitrix\Ikkomodule\Model\Modifier;
 use Bitrix\Ikkomodule\Model\Status;
-use Bitrix\Ikkomodule\Service\WaitingTimeService;
 use Bitrix\Im\V2\Chat\ChatFactory;
 use Bitrix\Im\V2\Chat\OpenChannelChat;
 use Bitrix\Im\V2\Link\Pin\PinService;
