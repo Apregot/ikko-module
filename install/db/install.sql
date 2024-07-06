@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS b_ikkomodule_order (
+	ID bigint PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	NAME varchar(255) NOT NULL,
+	DATE datetime NOT NULL
+);
