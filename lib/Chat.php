@@ -5,8 +5,11 @@ namespace Bitrix\Ikkomodule;
 use Bitrix\Ikkomodule\Bot\Barista;
 use Bitrix\Im\V2\Chat\ChatFactory;
 use Bitrix\Im\V2\Chat\OpenChannelChat;
+use Bitrix\Im\V2\Link\Pin\PinService;
+use Bitrix\Im\V2\Message;
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\Loader;
+use Bitrix\Main\Type\DateTime;
 
 Loader::requireModule('im');
 
@@ -14,6 +17,7 @@ class Chat
 {
 	private static self $instance;
 	private const CHAT_ID_OPTION_NAME = 'ikko_chat_id';
+	private const TODAY_STATUS_MESSAGE_ID_OPTION_NAME = 'ikko_status_message_id';
 
 	private function __construct()
 	{
@@ -32,6 +36,58 @@ class Chat
 	public function sendSimple(string $message): void
 	{
 		$this->sendInternal(['MESSAGE' => $message]);
+	}
+
+	public function sendStatus(): int
+	{
+		$id = $this->sendInternal(['MESSAGE' => 'menu']);
+		$this->setStatusMessageId($id);
+		$message = new Message($id);
+		(new PinService())->setContextUser(Barista::getOrCreateId())->pinMessage($message);
+
+		return $id;
+	}
+
+	public function updateStatus(): int
+	{
+		$messageId = $this->getStatusMessageId();
+
+		if (!$messageId)
+		{
+			return $this->sendStatus();
+		}
+
+		$message = new Message($messageId);
+
+		if ($this->isMessageFromAnotherDay($message))
+		{
+			return $this->sendStatus();
+		}
+
+		(new Message\Update\UpdateService($message))
+			->setContextUser(Barista::getOrCreateId())
+			->update(['MESSAGE' => 'menu1'])
+		;
+
+		return $messageId;
+	}
+
+	private function isMessageFromAnotherDay(Message $message): bool
+	{
+		$dayOfMessage = (int)$message->getDateCreate()->format('d');
+		$nowDay = (int)(new DateTime())->format('d');
+
+		return $dayOfMessage !== $nowDay;
+	}
+
+	private function setStatusMessageId(int $id): void
+	{
+		Option::set('ikkomodule', self::TODAY_STATUS_MESSAGE_ID_OPTION_NAME, $id);
+	}
+
+	private function getStatusMessageId(): int
+	{
+		return (int)Option::get('ikkomodule', self::TODAY_STATUS_MESSAGE_ID_OPTION_NAME, 0);
 	}
 
 	private function sendInternal(array $messageFields): int
