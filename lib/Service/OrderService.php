@@ -2,6 +2,7 @@
 
 namespace Bitrix\Ikkomodule\Service;
 
+use Bitrix\Ikkomodule\Model\Order;
 use Bitrix\IkkoModule\Table\OrderTable;
 use Bitrix\Main\Entity\ExpressionField;
 use Bitrix\Main\Type\DateTime;
@@ -46,5 +47,28 @@ class OrderService
 		;
 
 		return (int)$result['ORDER_COUNT'];
+	}
+
+	public function getItemsFromTo(DateTime $from, DateTime $to = new DateTime()): array
+	{
+		$items = OrderTable::query()
+			->setSelect(['*'])
+			->where('DATE', '>=', $from)
+			->where('DATE', '<=', $to)
+			->fetchAll()
+		;
+
+		$result = [];
+
+		foreach ($items as $item)
+		{
+			$result[] = (new Order())
+				->setId($item['ID'])
+				->setName($item['NAME'])
+				->setDate($item['DATE'])
+			;
+		}
+
+		return $result;
 	}
 }
