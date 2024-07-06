@@ -6,6 +6,7 @@ use Bitrix\ImBot\Bot\Base;
 use Bitrix\Main\Loader;
 
 Loader::requireModule('imbot');
+Loader::requireModule('im');
 
 class Barista extends Base
 {
