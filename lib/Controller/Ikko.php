@@ -106,9 +106,9 @@ class Ikko extends Controller
 		return new AjaxJson();
 	}
 
-	public function onDetailInfoClickAction(int $productId): int
+	public function onDetailInfoClickAction(int $product): int
 	{
-
+		Chat::get()->sendDetail();
 
 		return Barista::getOrCreateId();
 	}

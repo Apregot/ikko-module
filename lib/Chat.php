@@ -41,10 +41,22 @@ class Chat
 		return self::$instance;
 	}
 
-	public function sendDetail(int $itemId): void
+	public function sendDetail(int $itemId, int $userId): void
 	{
 		$detail = (new DetailService())->fetch($itemId);
-		$this->sendSimple($this->getDetailText($detail));
+		$this->sendToUser($userId, ['MESSAGE' => $this->getDetailText($detail)]);
+	}
+
+	public function sendToUser(int $userId, array $messageFields): int
+	{
+		$baseFields = [
+			'FROM_USER_ID' => Barista::getOrCreateId(),
+			'DIALOG_ID' => $userId,
+			'MESSAGE_TYPE' => \Bitrix\Im\V2\Chat::IM_TYPE_PRIVATE,
+		];
+		$fields = array_merge($messageFields, $baseFields);
+
+		return \CIMMessenger::Add($fields);
 	}
 
 	private function getDetailText(DetailItem $detailItem): string
