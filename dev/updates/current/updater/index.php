@@ -13,3 +13,11 @@ if ($updater->CanUpdateDatabase())
 		);
 	');
 }
+
+if ($updater->CanUpdateDatabase())
+{
+	if (!\Bitrix\Ikkomodule\Bot\Barista::getBotId())
+	{
+		\Bitrix\Ikkomodule\Bot\Barista::register();
+	}
+}
